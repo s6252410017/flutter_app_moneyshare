@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_moneyshare/views/show_moneyshare_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MoneyshareUI extends StatefulWidget {
@@ -14,6 +15,55 @@ class _MoneyshareUIState extends State<MoneyshareUI> {
   TextEditingController txMoney = TextEditingController();
   TextEditingController txPerson = TextEditingController();
   TextEditingController txTip = TextEditingController();
+
+  //Medthod แสดง Dialog โดยรับข้อความที่จะแสดงมาจากจุดที่เรียกใช้
+  showWarningDialog(context, msg) {
+    //showWarningDialog(context, msg){} สร่้างเอง
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Container(
+            color: Colors.deepPurple,
+            padding: EdgeInsets.only(
+              top: 10.0,
+              bottom: 10.0,
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                'คำเตือน',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          content: Text(
+            msg,
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'ตกลง',
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepPurple,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +226,53 @@ class _MoneyshareUIState extends State<MoneyshareUI> {
                   right: 40.0,
                 ),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //ตรวจสอบการป้อนต่างๆว่าได้ป้อนหรือยัง ถ้ายังแสดง dialogเตือน
+                    if (txMoney.text.length == 0) {
+                      //แสดง dialog เตือน
+                      showWarningDialog(context, 'ป้อนเงินด้วยนะจ้ะ...');
+                    } else if (txPerson.text.length == 0) {
+                      //แสดง dialog เตือน
+                      showWarningDialog(context, 'ป้อนคนด้วยนะจ้ะ...');
+                    } else {
+                      //พร้อมคำนวณ
+                      double money = 0, tip = 0, moneyshare = 0;
+                      int person = 0;
+
+                      //แปลงข้อความที่ป้อนจาก TextField เป็นตัวเลข
+                      money = double.parse(txMoney.text);
+                      person = int.parse(txPerson.text);
+
+                      if (tipCheck == true) {
+                        if (txTip.text.length == 0) {
+                          //แสดง dialog เตือน
+                          showWarningDialog(
+                              context, 'ป้อนเงินทริปด้วยนะจ้ะ...');
+                          return; //ออกจากการทำงานไม่ทำที่เหลือเลย
+                        } else {
+                          tip = double.parse(txTip.text);
+                        }
+                      }
+
+                      //คำนวณ
+                      moneyshare = (money + tip) / person;
+
+                      //ส่งไปแสดงผลที่หน้า ShowMoneyshareUI
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ShowMoneyshareUI(
+                              money: money,
+                              tip: tip,
+                              person: person,
+                              moneyshare: moneyshare,
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
                   child: Text(
                     'คำนวณ',
                   ),
@@ -205,7 +301,14 @@ class _MoneyshareUIState extends State<MoneyshareUI> {
                   right: 40.0,
                 ),
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      txMoney.text = '';
+                      txPerson.text = '';
+                      tipCheck = false;
+                      txTip.text = '';
+                    });
+                  },
                   icon: Icon(
                     Icons.refresh,
                   ),
@@ -225,6 +328,19 @@ class _MoneyshareUIState extends State<MoneyshareUI> {
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 25.0,
+              ),
+              Text(
+                'Created by CS SAU 2021',
+                style: TextStyle(
+                  color: Color(0xFF333333),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 25.0,
               ),
             ],
           ),
