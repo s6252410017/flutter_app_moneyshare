@@ -1,16 +1,9 @@
 # flutter_app_moneyshare
 
-A new Flutter project.
+Home Screen
 
-## Getting Started
+<img src = "https://user-images.githubusercontent.com/69613390/137437597-099b7f60-78a9-472b-aaa0-acfa66a0438c.png" width = "250">
 
-This project is a starting point for a Flutter application.
+Calculate Screen
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src = "https://user-images.githubusercontent.com/69613390/137437682-d4865673-8c81-4b8a-9069-21dc926ded3f.png" width = "250">
